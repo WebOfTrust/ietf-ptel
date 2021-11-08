@@ -9,11 +9,18 @@ Expires: 12 May 2022
 
 
                   Public Transaction Event Logs (PTEL)
-                  draft-todo-yourname-protocol-latest
+                     draft-pfeairheller-ptel-latest
 
 Abstract
 
    TODO Abstract
+
+Discussion Venues
+
+   This note is to be removed before publishing as an RFC.
+
+   Source for this draft and an issue tracker can be found at
+   https://github.com/WebOfTrust/ietf-ptel.
 
 Status of This Memo
 
