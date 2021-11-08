@@ -1,7 +1,7 @@
 ---
 title: "Public Transaction Event Logs (PTEL)"
 abbrev: "PTEL"
-docname: draft-todo-yourname-protocol-latest
+docname: draft-pfeairheller-ptel-latest
 category: info
 
 ipr: trust200902
