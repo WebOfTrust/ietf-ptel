@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2021-11-07T00:23:12.394380+00:00",
+  "timestamp": "2021-11-09T00:21:57.883708+00:00",
   "repo": "WebOfTrust/ietf-ptel",
   "labels": [
     {
@@ -50,5 +50,34 @@
     }
   ],
   "issues": [],
-  "pulls": []
+  "pulls": [
+    {
+      "number": 1,
+      "id": "PR_kwDOGMb6xs4uPuwe",
+      "title": "Content of draft specification for public transaction event logs.",
+      "url": "https://github.com/WebOfTrust/ietf-ptel/pull/1",
+      "state": "MERGED",
+      "author": "pfeairheller",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Signed-off-by: Phil Feairheller <pfeairheller@gmail.com>",
+      "createdAt": "2021-11-08T19:09:07Z",
+      "updatedAt": "2021-11-08T19:14:30Z",
+      "baseRepository": "WebOfTrust/ietf-ptel",
+      "baseRefName": "main",
+      "baseRefOid": "b45fd2ce653069272e3a08ec894547d903fdce2e",
+      "headRepository": "pfeairheller/ietf-ptel",
+      "headRefName": "feat-inital-draft",
+      "headRefOid": "28ecf47f133650323a0dc4ad3d283748527e6158",
+      "closedAt": "2021-11-08T19:14:25Z",
+      "mergedAt": "2021-11-08T19:14:25Z",
+      "mergedBy": "pfeairheller",
+      "mergeCommit": {
+        "oid": "6aa7eaaf22d9f6ecca2c537198c2a167108630c5"
+      },
+      "comments": [],
+      "reviews": []
+    }
+  ]
 }
