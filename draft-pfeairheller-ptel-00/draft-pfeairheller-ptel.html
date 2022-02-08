@@ -1,0 +1,1804 @@
+<!DOCTYPE html>
+<html lang="en" class="Internet-Draft">
+<head>
+<meta charset="utf-8">
+<meta content="Common,Latin" name="scripts">
+<meta content="initial-scale=1.0" name="viewport">
+<title>Public Transaction Event Logs (PTEL)</title>
+<meta content="Phil Feairheller" name="author">
+<meta content="
+       TODO Abstract 
+    " name="description">
+<meta content="xml2rfc 3.12.1" name="generator">
+<meta content="Internet-Draft" name="keyword">
+<meta content="draft-pfeairheller-ptel-latest" name="ietf.draft">
+<!-- Generator version information:
+  xml2rfc 3.12.1
+    Python 3.9.7
+    appdirs 1.4.4
+    ConfigArgParse 1.3
+    google-i18n-address 2.5.0
+    html5lib 1.1
+    intervaltree 3.1.0
+    Jinja2 2.11.3
+    kitchen 1.2.6
+    lxml 4.6.5
+    pycountry 20.7.3
+    pyflakes 2.3.1
+    PyYAML 5.4.1
+    requests 2.26.0
+    setuptools 52.0.0
+    six 1.16.0
+-->
+<link href="draft-pfeairheller-ptel.xml" rel="alternate" type="application/rfc+xml">
+<link href="#copyright" rel="license">
+<style type="text/css">@font-face {
+  font-family: 'Lora';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Italic'), local('Lora-Italic'), url('https://martinthomson.github.io/rfc-css/fonts/lora-italic-cyrillic-ext.woff2') format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Italic'), local('Lora-Italic'), url('https://martinthomson.github.io/rfc-css/fonts/lora-italic-cyrillic-ext.woff2') format('woff2');
+  unicode-range: U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Italic'), local('Lora-Italic'), url('https://martinthomson.github.io/rfc-css/fonts/lora-italic-vietnamese.woff2') format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+1EA0-1EF9, U+20AB;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Italic'), local('Lora-Italic'), url('https://martinthomson.github.io/rfc-css/fonts/lora-italic-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+@font-face {
+  font-family: 'Lora';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Italic'), local('Lora-Italic'), url('https://martinthomson.github.io/rfc-css/fonts/lora-italic-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Regular'), local('Lora-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/lora-regular-cyrillic-ext.woff2') format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Regular'), local('Lora-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/lora-regular-cyrillic.woff2') format('woff2');
+  unicode-range: U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Regular'), local('Lora-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/lora-regular-vietnamese.woff2') format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+1EA0-1EF9, U+20AB;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Regular'), local('Lora-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/lora-regular-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Regular'), local('Lora-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/lora-regular-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: local('Lora Bold'), local('Lora-Bold'), url('https://martinthomson.github.io/rfc-css/fonts/lora-bold-cyrillic-ext.woff2') format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: local('Lora Bold'), local('Lora-Bold'), url('https://martinthomson.github.io/rfc-css/fonts/lora-bold-cyrillic.woff2') format('woff2');
+  unicode-range: U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: local('Lora Bold'), local('Lora-Bold'), url('https://martinthomson.github.io/rfc-css/fonts/lora-bold-vietnamese.woff2') format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+1EA0-1EF9, U+20AB;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: local('Lora Bold'), local('Lora-Bold'), url('https://martinthomson.github.io/rfc-css/fonts/lora-bold-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: local('Lora Bold'), local('Lora-Bold'), url('https://martinthomson.github.io/rfc-css/fonts/lora-bold-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Cabin Condensed';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: local('Cabin Condensed SemiBold'), local('CabinCondensed-SemiBold'), url('https://martinthomson.github.io/rfc-css/fonts/cabincondensed-semibold-vietnamese.woff2') format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+1EA0-1EF9, U+20AB;
+}
+@font-face {
+  font-family: 'Cabin Condensed';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: local('Cabin Condensed SemiBold'), local('CabinCondensed-SemiBold'), url('https://martinthomson.github.io/rfc-css/fonts/cabincondensed-semibold-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Cabin Condensed';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: local('Cabin Condensed SemiBold'), local('CabinCondensed-SemiBold'), url('https://martinthomson.github.io/rfc-css/fonts/cabincondensed-semibold-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Oxygen Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Oxygen Mono'), local('OxygenMono-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/oxygenmono-regular-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Oxygen Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Oxygen Mono'), local('OxygenMono-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/oxygenmono-regular-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+:root {
+  color-scheme: light dark;
+  --background-color: #fff;
+  --text-color: #222;
+  --title-color: #191919;
+  --link-color: #2a6496;
+  --highlight-color: #f9f9f9;
+  --line-color: #eee;
+  --pilcrow-weak: #ddd;
+  --pilcrow-strong: #bbb;
+  --small-font-size: 14.5px;
+  --font-mono: 'Oxygen Mono', monospace;
+  scrollbar-color: #bbb #eee;
+}
+body {
+  max-width: 600px;
+  margin: 75px auto;
+  padding: 0 5px;
+  color: var(--text-color);
+  background-color: var(--background-color);
+  font: 16px/22px "Lora", serif;
+  scroll-behavior: smooth;
+}
+
+.ears {
+  display: none;
+}
+
+/* headings */
+h1, h2, h3, h4, h5, h6 {
+  font-family: "Cabin Condensed", sans-serif;
+  font-weight: 600;
+  margin: 0.8em 0 0.3em;
+  font-size-adjust: 0.5;
+  color: var(--title-color);
+}
+h1#title {
+  font-size: 32px;
+  line-height: 40px;
+  clear: both;
+}
+h1#title, h1#rfcnum {
+  margin: 1.5em 0 0.2em;
+}
+h1#rfcnum + h1#title {
+  margin: 0.2em 0;
+}
+
+h1, h2, h3 {
+  font-size: 22px;
+  line-height: 27px;
+}
+h4, h5, h6 {
+  font-size: 20px;
+  line-height: 24px;
+}
+
+/* general structure */
+.author {
+  padding-bottom: 0.3em;
+}
+#abstract+p {
+  font-size: 18px;
+  line-height: 24px;
+}
+#abstract+p code, #abstract+p samp, #abstract+p tt {
+  font-size: 16px;
+  line-height: 0;
+}
+
+p {
+  padding: 0;
+  margin: 0.5em 0;
+  text-align: left;
+}
+div {
+  margin: 0;
+}
+.alignRight.art-text {
+  background-color: var(--highlight-color);
+  border: 1px solid var(--line-color);
+  border-radius: 3px;
+  padding: 0.5em 1em 0;
+  margin-bottom: 0.5em;
+}
+.alignRight.art-text pre {
+  padding: 0;
+  width: auto;
+}
+.alignRight {
+  margin: 1em 0;
+}
+.alignRight > *:first-child {
+  border: none;
+  margin: 0;
+  float: right;
+  clear: both;
+}
+.alignRight > *:nth-child(2) {
+  clear: both;
+  display: block;
+  border: none;
+}
+svg {
+  display: block;
+}
+/* font-family isn't space-separated, but =~ will have to do */
+svg[font-family~="monospace" i], svg [font-family~="monospace" i] {
+  font-family: var(--font-mono);
+}
+.alignCenter.art-text {
+  background-color: var(--highlight-color);
+  border: 1px solid var(--line-color);
+  border-radius: 3px;
+  padding: 0.5em 1em 0;
+  margin-bottom: 0.5em;
+}
+.alignCenter.art-text pre {
+  padding: 0;
+  width: auto;
+}
+.alignCenter {
+  margin: 1em 0;
+}
+.alignCenter > *:first-child {
+  border: none;
+  /* this isn't optimal, but it's an existence proof.  PrinceXML doesn't
+     support flexbox yet.
+  */
+  display: table;
+  margin: 0 auto;
+}
+
+/* lists */
+ol, ul {
+  padding: 0;
+  margin: 0 0 0.5em 2em;
+}
+ol ol, ul ul, ol ul, ul ol {
+  margin-left: 1em;
+}
+li {
+  margin: 0 0 0.25em 0;
+}
+.ulCompact li {
+  margin: 0;
+}
+ul.empty, .ulEmpty {
+  list-style-type: none;
+}
+ul.empty li, .ulEmpty li {
+  margin-top: 0.5em;
+}
+ul.compact, .ulCompact,
+ol.compact, .olCompact {
+  line-height: 100%;
+  margin: 0 0 0 2em;
+}
+
+/* definition lists */
+dl {
+}
+dl > dt {
+  float: left;
+  margin-right: 1em;
+}
+dl > dd {
+  margin-bottom: .8em;
+  min-height: 1.3em;
+}
+dl.compact > dd, .dlCompact > dd {
+  margin-bottom: 0em;
+}
+dl > dd > dl {
+  margin-top: 0.5em;
+  margin-bottom: 0em;
+}
+dd.break {
+  display: none;
+}
+
+/* links */
+a, a[href].selfRef:hover {
+  text-decoration: none;
+}
+a[href].selfRef {
+  color: var(--text-color);
+}
+a[href] {
+  color: var(--link-color);
+}
+a[href]:hover {
+  text-decoration: underline;
+}
+a[href].selfRef:hover {
+  background-color: var(--highlight-color);
+}
+a.xref {
+  white-space: nowrap;
+}
+
+/* Figures */
+tt, code, pre {
+  background-color: var(--highlight-color);
+  font: 14px/22px var(--font-mono);
+}
+tt, code {
+  /* changing the font for inline elements leads to different ascender
+     and descender heights; as we want to retain baseline alignment,
+     remove leading to avoid altering the final height of lines */
+  line-height: 0;
+}
+pre {
+  border: 1px solid var(--line-color);
+  font-size: 13.5px;
+  line-height: 16px;
+  letter-spacing: -0.2px;
+  margin: 5px;
+  padding: 5px;
+}
+img {
+  max-width: 100%;
+}
+figure {
+  margin: 0.5em 0;
+  padding: 0;
+}
+figure blockquote {
+  margin: 0.8em 0.4em 0.4em;
+}
+figcaption, caption {
+  font-style: italic;
+  margin: 0.5em 1.5em;
+  text-align: left;
+}
+@media screen {
+  pre, svg {
+    display: inline-block;
+    overflow-x: auto;
+  }
+  pre {
+    max-width: 100%;
+    width: calc(100% - 22px - 1em);
+  }
+  svg {
+    max-width: calc(100% - 22px - 1em);
+  }
+  figure pre {
+    display: block;
+    width: calc(100% - 25px);
+  }
+  pre + .pilcrow, svg + .pilcrow {
+    display: inline-block;
+    vertical-align: text-bottom;
+    padding-bottom: 8px;
+  }
+}
+
+/* aside, blockquote */
+aside, blockquote {
+  margin-left: 0;
+  padding: 0 2em;
+  font-style: italic;
+}
+blockquote {
+  margin: 1em 0;
+}
+cite {
+  display: block;
+  text-align: right;
+  font-style: italic;
+}
+
+/* tables */
+table {
+  max-width: 100%;
+  margin: 0 0 1em;
+  border-collapse: collapse;
+}
+table.right {
+  margin-left: auto;
+}
+table.center {
+  margin-left: auto;
+  margin-right: auto;
+}
+table.left {
+  margin-right: auto;
+}
+thead, tbody {
+  border: 1px solid var(--line-color);
+}
+th, td {
+  text-align: left;
+  vertical-align: top;
+  padding: 5px 10px;
+}
+th {
+  background-color: var(--line-color);
+}
+tr:nth-child(2n) > td {
+  background-color: var(--background-color);
+}
+tr:nth-child(2n+1) > td {
+  background-color: var(--highlight-color);
+}
+thead+tbody > tr:nth-child(2n) > td {
+  background-color: var(--highlight-color);
+}
+thead+tbody > tr:nth-child(2n+1) > td {
+  background-color: var(--background-color);
+}
+table caption {
+  margin: 0;
+  padding: 3px 0 3px 1em;
+}
+table p {
+  margin: 0;
+}
+
+/* pilcrow */
+a.pilcrow {
+  margin-left: 3px;
+  opacity: 0.2;
+  user-select: none;
+}
+a.pilcrow[href] { color: var(--pilcrow-weak); }
+a.pilcrow[href]:hover { text-decoration: none; }
+@media not print {
+  :hover > a.pilcrow {
+    opacity: 1;
+  }
+  a.pilcrow[href]:hover {
+    color: var(--pilcrow-strong);
+    background-color: transparent;
+  }
+}
+@media print {
+  a.pilcrow {
+    display: none;
+  }
+}
+
+/* misc */
+hr {
+  border: 0;
+  border-top: 1px solid var(--line-color);
+}
+.bcp14 {
+  font-variant: small-caps;
+}
+
+.role {
+  font-variant: all-small-caps;
+}
+
+/* info block */
+#identifiers {
+  margin: 0;
+  font-size: var(--small-font-size);
+  line-height: 18px;
+  --identifier-width: 8em;
+}
+#identifiers dt {
+  width: var(--identifier-width);
+  margin: 0;
+  clear: left;
+  float: left;
+  text-align: right;
+}
+#identifiers dd {
+  margin: 0 0 0 calc(1em + var(--identifier-width));
+  min-width: 5em;
+}
+#identifiers .authors .author {
+  display: inline-block;
+  margin-right: 1.5em;
+}
+#identifiers .authors .org {
+  font-style: italic;
+}
+
+/* The prepared/rendered info at the very bottom of the page */
+.docInfo {
+  color: #999;
+  font-size: 0.9em;
+  font-style: italic;
+  margin-top: 2em;
+}
+.docInfo .prepared {
+  float: left;
+}
+.docInfo .prepared {
+  float: right;
+}
+
+/* table of contents */
+#toc {
+  padding: 0.75em 0 2em 0;
+  margin-bottom: 1em;
+}
+#toc nav ul {
+  margin: 0 0.5em 0 0;
+  padding: 0;
+  list-style: none;
+}
+#toc nav li {
+  line-height: 1.3em;
+  margin: 0.75em 0;
+  padding-left: 1.2em;
+  text-indent: -1.2em;
+}
+#toc a.xref {
+  white-space: normal;
+}
+/* references */
+.references dt {
+  text-align: right;
+  font-weight: bold;
+  min-width: 7em;
+}
+.references dd {
+  margin-left: 8em;
+  overflow: auto;
+}
+
+.refInstance {
+  margin-bottom: 1.25em;
+}
+
+.references .ascii {
+  margin-bottom: 0.25em;
+}
+
+/* index */
+#rfc\.index\.index + ul {
+  margin-left: 0;
+}
+
+/* authors */
+address.vcard {
+  font-style: normal;
+  margin: 1em 0;
+}
+address.vcard .nameRole {
+  font-weight: 700;
+  margin-left: 0;
+}
+address.vcard .label {
+  margin: 0.5em 0;
+}
+address.vcard .type {
+  display: none;
+}
+.alternative-contact {
+  margin: 1.5em 0 1em;
+}
+hr.addr {
+  border-top: 1px dashed;
+  margin: 0;
+  color: #ddd;
+  max-width: calc(100% - 16px);
+}
+@media (min-width: 500px) {
+  #authors-addresses > section {
+    column-count: 2;
+    column-gap: 20px;
+  }
+  #authors-addresses > section > h2 {
+    column-span: all;
+  }
+  /* hack for break-inside: avoid-column */
+  #authors-addresses address {
+    display: inline-block;
+    break-inside: avoid-column;
+  }
+}
+
+.rfcEditorRemove p:first-of-type {
+  font-style: italic;
+}
+.cref {
+  background-color: rgba(249, 232, 105, 0.3);
+  padding: 2px 4px;
+}
+.crefSource {
+  font-style: italic;
+}
+/* alternative layout for smaller screens */
+@media screen and (max-width: 929px) {
+  #toc {
+    position: fixed;
+    z-index: 2;
+    top: 0;
+    right: 0;
+    padding: 0;
+    margin: 0;
+    border-bottom: 1px solid #ccc;
+    opacity: 0.6;
+  }
+  #toc.active {
+      opacity: 1;
+  }
+  #toc h2 {
+    margin: 0;
+    padding: 2px 0 2px 6px;
+    padding-right: 1em;
+    font-size: 18px;
+    line-height: 24px;
+    min-width: 190px;
+    text-align: right;
+    background-color: #444;
+    color: white;
+    cursor: pointer;
+  }
+  #toc h2::before { /* css hamburger */
+    float: right;
+    position: relative;
+    width: 1em;
+    height: 1px;
+    left: -164px;
+    margin: 8px 0 0 0;
+    background: white none repeat scroll 0 0;
+    box-shadow: 0 4px 0 0 white, 0 8px 0 0 white;
+    content: "";
+  }
+  #toc nav {
+    display: none;
+    background-color: var(--background-color);
+    padding: 0.5em 1em 1em;
+    overflow: auto;
+    overscroll-behavior: contain;
+    height: calc(100vh - 48px);
+    border-left: 1px solid #ddd;
+  }
+  #toc.active nav {
+    display: block;
+  }
+  /* Make the collapsed ToC header render white on gray also when it's a link */
+  #toc h2 a,
+  #toc h2 a:link,
+  #toc h2 a:focus,
+  #toc h2 a:hover,
+  #toc a.toplink,
+  #toc a.toplink:hover {
+    color: white;
+    background-color: #444;
+    text-decoration: none;
+  }
+  #toc a.toplink {
+    margin-top: 2px;
+  }
+}
+
+/* alternative layout for wide screens */
+@media screen and (min-width: 930px) {
+  body {
+    padding-right: 360px;
+    padding-right: calc(min(180px + 20%, 500px));
+  }
+  #toc {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    right: calc(50vw - 480px);
+    width: 312px;
+    margin: 0;
+    padding: 0;
+    z-index: 1;
+  }
+  #toc h2 {
+    margin: 0;
+    padding: 0.25em 1em 1em 0;
+  }
+  #toc nav {
+    display: block;
+    height: calc(90vh - 84px);
+    bottom: 0;
+    padding: 0.5em 0 2em;
+    overflow: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
+  }
+  #toc nav > ul  {
+    margin-bottom: 2em;
+  }
+  #toc ul {
+    margin: 0 0 0 4px;
+    font-size: var(--small-font-size);
+  }
+  #toc ul p, #toc ul li {
+    margin: 2px 0;
+    line-height: 22px;
+  }
+  img { /* future proofing */
+    max-width: 100%;
+    height: auto;
+  }
+}
+
+/* pagination */
+@media print {
+  body {
+    width: 100%;
+  }
+  p {
+    orphans: 3;
+    widows: 3;
+  }
+  #n-copyright-notice {
+    border-bottom: none;
+  }
+  #toc, #n-introduction {
+    page-break-before: always;
+  }
+  #toc {
+    border-top: none;
+    padding-top: 0;
+  }
+  figure, pre {
+    page-break-inside: avoid;
+  }
+  figure {
+    overflow: scroll;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    page-break-after: avoid;
+  }
+  h2+*, h3+*, h4+*, h5+*, h6+* {
+    page-break-before: avoid;
+  }
+  pre {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    font-size: 10pt;
+  }
+  table {
+    border: 1px solid #ddd;
+  }
+  td {
+    border-top: 1px solid #ddd;
+  }
+}
+
+@page :first {
+  padding-top: 0;
+  @top-left {
+    content: normal;
+    border: none;
+  }
+  @top-center {
+    content: normal;
+    border: none;
+  }
+  @top-right {
+    content: normal;
+    border: none;
+  }
+}
+
+@page {
+  size: A4;
+  margin-bottom: 45mm;
+  padding-top: 20px;
+}
+
+/* Changes introduced to fix issues found during implementation */
+
+/* Separate body from document info even without intervening H1 */
+section {
+  clear: both;
+}
+
+/* Top align author divs, to avoid names without organization dropping level with org names */
+.author {
+  vertical-align: top;
+}
+
+/* Style section numbers with more space between number and title */
+.section-number {
+  padding-right: 0.5em;
+}
+
+/* Add styling for a link in the ToC that points to the top of the document */
+a.toplink {
+  float: right;
+  margin: 8px 0.5em 0;
+}
+
+/* Fix the dl styling to match the RFC 7992 attributes */
+dl > dt,
+dl.dlParallel > dt {
+  float: left;
+  margin-right: 1em;
+}
+dl.dlNewline > dt {
+  float: none;
+}
+
+/* Provide styling for table cell text alignment */
+table .text-left, table .text-left {
+  text-align: left;
+}
+table .text-center, table .text-center {
+  text-align: center;
+}
+table .text-right, table .text-right {
+  text-align: right;
+}
+
+/* Make the alternative author contact information look less like just another
+   author, and group it closer with the primary author contact information */
+.alternative-contact {
+  margin: 0.5em 0 0.25em 0;
+}
+address .non-ascii {
+  margin: 0 0 0 2em;
+}
+
+/* With it being possible to set tables with alignment
+  left, center, and right, { width: 100%; } does not make sense */
+table {
+  width: auto;
+}
+
+/* Avoid reference text that sits in a block with very wide left margin,
+   because of a long floating dt label.*/
+.references dd {
+  overflow: visible;
+}
+
+/* Control caption placement */
+caption {
+  caption-side: bottom;
+}
+
+/* Limit the width of the author address vcard, so names in right-to-left
+   script don't end up on the other side of the page. */
+
+address.vcard {
+  max-width: 20em;
+  margin-right: auto;
+}
+
+/* For address alignment dependent on LTR or RTL scripts */
+address div.left {
+  text-align: left;
+}
+address div.right {
+  text-align: right;
+}
+
+/* Give the table caption label the same styling as the figcaption */
+
+@media print {
+  .toplink {
+    display: none;
+  }
+
+  /* avoid overwriting the top border line with the ToC header */
+  #toc {
+    padding-top: 1px;
+  }
+
+  /* Avoid page breaks inside dl and author address entries */
+  dd {
+    page-break-before: avoid;
+  }
+  .vcard {
+    page-break-inside: avoid;
+  }
+
+}
+/* Tweak the bcp14 keyword presentation */
+.bcp14 {
+  font-variant: small-caps;
+  font-weight: bold;
+  font-size: 0.9em;
+}
+
+/* Dark mode. */
+@media (prefers-color-scheme: dark) {
+:root {
+  --background-color: #121212;
+  --text-color: #f0f0f0;
+  --title-color: #fff;
+  --link-color: #4da4f0;
+  --highlight-color: #282828;
+  --line-color: #444;
+  --pilcrow-weak: #444;
+  --pilcrow-strong: #666;
+  scrollbar-color: #777 #333;
+}
+/* Trick: a prefix match works because only black and white are allowed */
+svg [stroke="black"], svg [stroke^="#000"] {
+  stroke: var(--text-color);
+}
+svg [stroke="white"], svg [stroke^="#fff"] {
+  stroke: var(--background-color);
+}
+svg [fill="black"], svg [fill^="#000"], svg :not([fill]) {
+  fill: var(--text-color);
+}
+svg [stroke="fill"], svg [fill^="#fff"] {
+  fill: var(--background-color);
+}
+}
+</style>
+
+</head>
+<body>
+<table class="ears">
+<thead><tr>
+<td class="left">Internet-Draft</td>
+<td class="center">PTEL</td>
+<td class="right">February 2022</td>
+</tr></thead>
+<tfoot><tr>
+<td class="left">Feairheller</td>
+<td class="center">Expires 12 August 2022</td>
+<td class="right">[Page]</td>
+</tr></tfoot>
+</table>
+<div id="external-metadata" class="document-information"></div>
+<div id="internal-metadata" class="document-information">
+<dl id="identifiers">
+<dt class="label-workgroup">Workgroup:</dt>
+<dd class="workgroup">TODO Working Group</dd>
+<dt class="label-internet-draft">Internet-Draft:</dt>
+<dd class="internet-draft">draft-pfeairheller-ptel-latest</dd>
+<dt class="label-published">Published:</dt>
+<dd class="published">
+<time datetime="2022-02-08" class="published">8 February 2022</time>
+    </dd>
+<dt class="label-intended-status">Intended Status:</dt>
+<dd class="intended-status">Informational</dd>
+<dt class="label-expires">Expires:</dt>
+<dd class="expires"><time datetime="2022-08-12">12 August 2022</time></dd>
+<dt class="label-authors">Author:</dt>
+<dd class="authors">
+<div class="author">
+      <div class="author-name">P. Feairheller</div>
+<div class="org">GLEIF</div>
+</div>
+</dd>
+</dl>
+</div>
+<h1 id="title">Public Transaction Event Logs (PTEL)</h1>
+<section id="section-abstract">
+      <h2 id="abstract"><a href="#abstract" class="selfRef">Abstract</a></h2>
+<p id="section-abstract-1">TODO Abstract<a href="#section-abstract-1" class="pilcrow">¶</a></p>
+</section>
+<section class="note rfcEditorRemove" id="section-note.1">
+      <h2 id="name-discussion-venues">
+<a href="#name-discussion-venues" class="section-name selfRef">Discussion Venues</a>
+      </h2>
+<p id="section-note.1-1">This note is to be removed before publishing as an RFC.<a href="#section-note.1-1" class="pilcrow">¶</a></p>
+<p id="section-note.1-2">Source for this draft and an issue tracker can be found at
+    <span><a href="https://github.com/WebOfTrust/ietf-ptel">https://github.com/WebOfTrust/ietf-ptel</a></span>.<a href="#section-note.1-2" class="pilcrow">¶</a></p>
+</section>
+<div id="status-of-memo">
+<section id="section-boilerplate.1">
+        <h2 id="name-status-of-this-memo">
+<a href="#name-status-of-this-memo" class="section-name selfRef">Status of This Memo</a>
+        </h2>
+<p id="section-boilerplate.1-1">
+        This Internet-Draft is submitted in full conformance with the
+        provisions of BCP 78 and BCP 79.<a href="#section-boilerplate.1-1" class="pilcrow">¶</a></p>
+<p id="section-boilerplate.1-2">
+        Internet-Drafts are working documents of the Internet Engineering Task
+        Force (IETF). Note that other groups may also distribute working
+        documents as Internet-Drafts. The list of current Internet-Drafts is
+        at <span><a href="https://datatracker.ietf.org/drafts/current/">https://datatracker.ietf.org/drafts/current/</a></span>.<a href="#section-boilerplate.1-2" class="pilcrow">¶</a></p>
+<p id="section-boilerplate.1-3">
+        Internet-Drafts are draft documents valid for a maximum of six months
+        and may be updated, replaced, or obsoleted by other documents at any
+        time. It is inappropriate to use Internet-Drafts as reference
+        material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
+<p id="section-boilerplate.1-4">
+        This Internet-Draft will expire on 12 August 2022.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="copyright">
+<section id="section-boilerplate.2">
+        <h2 id="name-copyright-notice">
+<a href="#name-copyright-notice" class="section-name selfRef">Copyright Notice</a>
+        </h2>
+<p id="section-boilerplate.2-1">
+            Copyright (c) 2022 IETF Trust and the persons identified as the
+            document authors. All rights reserved.<a href="#section-boilerplate.2-1" class="pilcrow">¶</a></p>
+<p id="section-boilerplate.2-2">
+            This document is subject to BCP 78 and the IETF Trust's Legal
+            Provisions Relating to IETF Documents
+            (<span><a href="https://trustee.ietf.org/license-info">https://trustee.ietf.org/license-info</a></span>) in effect on the date of
+            publication of this document. Please review these documents
+            carefully, as they describe your rights and restrictions with
+            respect to this document. Code Components extracted from this
+            document must include Revised BSD License text as described in
+            Section 4.e of the Trust Legal Provisions and are provided without
+            warranty as described in the Revised BSD License.<a href="#section-boilerplate.2-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="toc">
+<section id="section-toc.1">
+        <a href="#" onclick="scroll(0,0)" class="toplink">▲</a><h2 id="name-table-of-contents">
+<a href="#name-table-of-contents" class="section-name selfRef">Table of Contents</a>
+        </h2>
+<nav class="toc"><ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.1">
+            <p id="section-toc.1-1.1.1"><a href="#section-1" class="xref">1</a>.  <a href="#name-introduction" class="xref">Introduction</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.1.2.1">
+                <p id="section-toc.1-1.1.2.1.1" class="keepWithNext"><a href="#section-1.1" class="xref">1.1</a>.  <a href="#name-transaction-event-log" class="xref">Transaction Event Log</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.1.2.2">
+                <p id="section-toc.1-1.1.2.2.1" class="keepWithNext"><a href="#section-1.2" class="xref">1.2</a>.  <a href="#name-verifiable-credential-regis" class="xref">Verifiable Credential Registry</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.1.2.3">
+                <p id="section-toc.1-1.1.2.3.1"><a href="#section-1.3" class="xref">1.3</a>.  <a href="#name-management-tel" class="xref">Management TEL</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.1.2.3.2.1">
+                    <p id="section-toc.1-1.1.2.3.2.1.1" class="keepWithNext"><a href="#section-1.3.1" class="xref">1.3.1</a>.  <a href="#name-configuration" class="xref">Configuration</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.1.2.3.2.2">
+                    <p id="section-toc.1-1.1.2.3.2.2.1"><a href="#section-1.3.2" class="xref">1.3.2</a>.  <a href="#name-registry-inception-event" class="xref">Registry Inception Event</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.1.2.3.2.3">
+                    <p id="section-toc.1-1.1.2.3.2.3.1"><a href="#section-1.3.3" class="xref">1.3.3</a>.  <a href="#name-registry-rotation-event" class="xref">Registry Rotation Event</a></p>
+</li>
+                </ul>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.1.2.4">
+                <p id="section-toc.1-1.1.2.4.1"><a href="#section-1.4" class="xref">1.4</a>.  <a href="#name-verifiable-credential-tels" class="xref">Verifiable Credential TELs</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.1.2.4.2.1">
+                    <p id="section-toc.1-1.1.2.4.2.1.1"><a href="#section-1.4.1" class="xref">1.4.1</a>.  <a href="#name-self-addressing-identifiers" class="xref">Self Addressing Identifiers</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.1.2.4.2.2">
+                    <p id="section-toc.1-1.1.2.4.2.2.1"><a href="#section-1.4.2" class="xref">1.4.2</a>.  <a href="#name-derivation-process" class="xref">Derivation Process</a></p>
+</li>
+                </ul>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.1.2.5">
+                <p id="section-toc.1-1.1.2.5.1"><a href="#section-1.5" class="xref">1.5</a>.  <a href="#name-self-addressing-identifiers-" class="xref">Self-Addressing Identifiers in a TEL</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.1.2.6">
+                <p id="section-toc.1-1.1.2.6.1"><a href="#section-1.6" class="xref">1.6</a>.  <a href="#name-credential-issuance-revocat" class="xref">Credential Issuance/Revocation TEL</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.1.2.6.2.1">
+                    <p id="section-toc.1-1.1.2.6.2.1.1"><a href="#section-1.6.1" class="xref">1.6.1</a>.  <a href="#name-simple-credential-issuance-" class="xref">Simple Credential Issuance Event</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.1.2.6.2.2">
+                    <p id="section-toc.1-1.1.2.6.2.2.1"><a href="#section-1.6.2" class="xref">1.6.2</a>.  <a href="#name-simple-credential-revocatio" class="xref">Simple Credential Revocation Event</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.1.2.6.2.3">
+                    <p id="section-toc.1-1.1.2.6.2.3.1"><a href="#section-1.6.3" class="xref">1.6.3</a>.  <a href="#name-credential-issuance-event" class="xref">Credential Issuance Event</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.1.2.6.2.4">
+                    <p id="section-toc.1-1.1.2.6.2.4.1"><a href="#section-1.6.4" class="xref">1.6.4</a>.  <a href="#name-credential-revocation-event" class="xref">Credential Revocation Event</a></p>
+</li>
+                </ul>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.1.2.7">
+                <p id="section-toc.1-1.1.2.7.1"><a href="#section-1.7" class="xref">1.7</a>.  <a href="#name-use-case" class="xref">Use Case</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.1.2.8">
+                <p id="section-toc.1-1.1.2.8.1"><a href="#section-1.8" class="xref">1.8</a>.  <a href="#name-security-considerations" class="xref">Security Considerations</a></p>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2">
+            <p id="section-toc.1-1.2.1"><a href="#section-2" class="xref">2</a>.  <a href="#name-iana-considerations" class="xref">IANA Considerations</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3">
+            <p id="section-toc.1-1.3.1"><a href="#appendix-A" class="xref"></a><a href="#name-acknowledgments" class="xref">Acknowledgments</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4">
+            <p id="section-toc.1-1.4.1"><a href="#appendix-B" class="xref"></a><a href="#name-authors-address" class="xref">Author's Address</a></p>
+</li>
+        </ul>
+</nav>
+</section>
+</div>
+<div id="introduction">
+<section id="section-1">
+      <h2 id="name-introduction">
+<a href="#section-1" class="section-number selfRef">1. </a><a href="#name-introduction" class="section-name selfRef">Introduction</a>
+      </h2>
+<p id="section-1-1">The <em>Transaction Event Log</em> (TEL) is a hash linked data structure of transactions that can be used to track state. A
+<em>Public Verifiable Credential Registry</em> can be represented in several TELs to establish issuance or revocation state of
+a Verifiable Credential (VC). The KEL is used to establish control authority over the keys used to commit to the events
+of the TEL and sign the VC. The events of the TEL are used to establish the issuance or revocation state of the VCs
+issued by the controller of the identifier represented by the KEL. This document specifies a design for <em>public</em>
+VCs only. The use of a hash digest of the VC contents as the identifier of that VC or an attribute in a TEL event allows
+for correlation of uses of the VC.<a href="#section-1-1" class="pilcrow">¶</a></p>
+<div id="transaction-event-log">
+<section id="section-1.1">
+        <h3 id="name-transaction-event-log">
+<a href="#section-1.1" class="section-number selfRef">1.1. </a><a href="#name-transaction-event-log" class="section-name selfRef">Transaction Event Log</a>
+        </h3>
+<p id="section-1.1-1">A KERI KEL can control a TEL by anchoring the TEL to key events of the KEL with the following:<a href="#section-1.1-1" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="section-1.1-2">
+<li id="section-1.1-2.1">Create the inception event for the TEL with the TEL specific unique identifier.<a href="#section-1.1-2.1" class="pilcrow">¶</a>
+</li>
+          <li id="section-1.1-2.2">Generate a hash digest of the serialized content of the TEL inception event.<a href="#section-1.1-2.2" class="pilcrow">¶</a>
+</li>
+          <li id="section-1.1-2.3">Attach anchoring seals from the KEL events to the TEL events they are authorizing.<a href="#section-1.1-2.3" class="pilcrow">¶</a>
+</li>
+          <li id="section-1.1-2.4">Sign the KEL event as usual to commit to the digest of the serialized TEL event.<a href="#section-1.1-2.4" class="pilcrow">¶</a>
+</li>
+        </ol>
+<p id="section-1.1-3">Any validator can cryptographically verify the authoritative state by validating the signatures of the referenced KEL.
+The TEL events do not have to be signed as the commitment to the event is in the form of the digest in the seal in the
+anchoring KEL event and the signatures on that event. Like KEL events, all TEL events have the fields <code>i</code>, <code>s</code>, and
+<code>t</code>. However, the <code>s</code> or sequence number field in TEL events represents the "clock" for that transaction set. Each
+transaction set can have its own "clock" (e.g. bitcoin block height, wall clock, etc) and is independent of the sequence
+number of the KEL events. In the case of the Verifiable Credential Registry, the <code>s</code> field is simply a monotonically
+increasing integer.<a href="#section-1.1-3" class="pilcrow">¶</a></p>
+<p id="section-1.1-4">The events are anchored back to the KEL using Event Source Seals whose JSON representation is as follows.<a href="#section-1.1-4" class="pilcrow">¶</a></p>
+<p id="section-1.1-5"><code>
+{
+ "s": "3",
+ "d": "ELvaU6Z-i0d8JJR2nmwyYAZAoTNZH3UfSVPzhzS6b5CM"
+}
+</code><a href="#section-1.1-5" class="pilcrow">¶</a></p>
+<p id="section-1.1-6">For TEL events, this seal back to the KEL will be delivered as an attachment of event source seal triples in duple of
+(s, d).<a href="#section-1.1-6" class="pilcrow">¶</a></p>
+<p id="section-1.1-7"><code>
+-GAB
+0AAAAAAAAAAAAAAAAAAAAAAw
+ELvaU6Z-i0d8JJR2nmwyYAZAoTNZH3UfSVPzhzS6b5CM
+</code><a href="#section-1.1-7" class="pilcrow">¶</a></p>
+<p id="section-1.1-8">Event source seal attachment example (line feeds added for readability)<a href="#section-1.1-8" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="verifiable-credential-registry">
+<section id="section-1.2">
+        <h3 id="name-verifiable-credential-regis">
+<a href="#section-1.2" class="section-number selfRef">1.2. </a><a href="#name-verifiable-credential-regis" class="section-name selfRef">Verifiable Credential Registry</a>
+        </h3>
+<p id="section-1.2-1">A <em>Public Verifiable Credential Registry</em> (Registry) is a form of a <em>Verifiable Data Registry</em> that tracks the
+issuance/revocation state of credentials issued by the controller of the KEL. Two types of TELs will be used for this
+purpose. The first type of TEL is the management TEL and will signal the creation of the Registry and track the list of
+Registrars that will act as Backers for the individual TELs for each VC. The second type of TEL is the VC TEL which will
+track the issued or revoked state of each VC and will contain a reference to it's corresponding management TEL.<a href="#section-1.2-1" class="pilcrow">¶</a></p>
+<p id="section-1.2-2">The following events will be used to create and maintain the TELs for the Registry.<a href="#section-1.2-2" class="pilcrow">¶</a></p>
+<table class="center" id="table-1">
+          <caption><a href="#table-1" class="selfRef">Table 1</a></caption>
+<thead>
+            <tr>
+              <th class="text-left" rowspan="1" colspan="1">Ilk</th>
+              <th class="text-left" rowspan="1" colspan="1">TEL</th>
+              <th class="text-left" rowspan="1" colspan="1">Name</th>
+              <th class="text-left" rowspan="1" colspan="1">Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">vcp</td>
+              <td class="text-left" rowspan="1" colspan="1">Management</td>
+              <td class="text-left" rowspan="1" colspan="1">Registry Inception Event</td>
+              <td class="text-left" rowspan="1" colspan="1">Inception statement for the Registry</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">vrt</td>
+              <td class="text-left" rowspan="1" colspan="1">Management</td>
+              <td class="text-left" rowspan="1" colspan="1">Registry Rotation Event</td>
+              <td class="text-left" rowspan="1" colspan="1">Rotation event for updating Backers</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">iss</td>
+              <td class="text-left" rowspan="1" colspan="1">VC</td>
+              <td class="text-left" rowspan="1" colspan="1">Simple Credential Issuance Event</td>
+              <td class="text-left" rowspan="1" colspan="1">Issue credential with no Backers</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">rev</td>
+              <td class="text-left" rowspan="1" colspan="1">VC</td>
+              <td class="text-left" rowspan="1" colspan="1">Simple Credential Revocation Event</td>
+              <td class="text-left" rowspan="1" colspan="1">Revoke previously issued credential with no Backers</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">bis</td>
+              <td class="text-left" rowspan="1" colspan="1">VC</td>
+              <td class="text-left" rowspan="1" colspan="1">Credential Issuance Event</td>
+              <td class="text-left" rowspan="1" colspan="1">Issue credential</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">brv</td>
+              <td class="text-left" rowspan="1" colspan="1">VC</td>
+              <td class="text-left" rowspan="1" colspan="1">Credential Revocation Event</td>
+              <td class="text-left" rowspan="1" colspan="1">Revoke previously issued credential</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">iis</td>
+              <td class="text-left" rowspan="1" colspan="1">VC</td>
+              <td class="text-left" rowspan="1" colspan="1">Simple Credential Issuance Event with VC Hash</td>
+              <td class="text-left" rowspan="1" colspan="1">Issue credential with no Backers, VC Hash as separate field</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">irv</td>
+              <td class="text-left" rowspan="1" colspan="1">VC</td>
+              <td class="text-left" rowspan="1" colspan="1">Simple Credential Revocation Event with VC Hash</td>
+              <td class="text-left" rowspan="1" colspan="1">Revoke previously issued credential with no Backers, VC Hash as separate field</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">ibs</td>
+              <td class="text-left" rowspan="1" colspan="1">VC</td>
+              <td class="text-left" rowspan="1" colspan="1">Credential Issuance Event with VC Hash</td>
+              <td class="text-left" rowspan="1" colspan="1">Issue credential, VC Hash as separate field</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">ibr</td>
+              <td class="text-left" rowspan="1" colspan="1">VC</td>
+              <td class="text-left" rowspan="1" colspan="1">Credential Revocation Event with VC Hash</td>
+              <td class="text-left" rowspan="1" colspan="1">Revoke previously issued credential, VC Hash as separate field</td>
+            </tr>
+          </tbody>
+        </table>
+</section>
+</div>
+<div id="management-tel">
+<section id="section-1.3">
+        <h3 id="name-management-tel">
+<a href="#section-1.3" class="section-number selfRef">1.3. </a><a href="#name-management-tel" class="section-name selfRef">Management TEL</a>
+        </h3>
+<p id="section-1.3-1">The state tracked by the Management TEL will be the list of Registrar identifiers that serve as backers for each TEL
+under its provenance. This list of Registrars can be rotated with events specific to this type of TEL. In this way,
+Registrar lists are analogous to Backer lists in KERI KELs. Additional metadata can be tracked in this TEL, for example
+references to Schema. The Management TEL will have two events: <code>vcp</code> for Registry inception and <code>vrt</code>
+for rotation of the list or Registrars. The events will reference the controlling identifier in the <code>ii</code> field and be
+anchored to the KEL with an event seal triple attachment.<a href="#section-1.3-1" class="pilcrow">¶</a></p>
+<p id="section-1.3-2">The Registry specific identifier will be self-addressing (see <span><a href="#self-addressing-identifiers" class="xref">below</a> (<a href="#self-addressing-identifiers" class="xref">Section 1.4.1</a>)</span>
+for definition) using its inception data for its derivation. This requires a commitment to the anchor in the controlling
+KEL and necessitates the event location seal be included in the event. The derived identifier is then set in the <code>i</code>
+field of the events in the management TEL.<a href="#section-1.3-2" class="pilcrow">¶</a></p>
+<p id="section-1.3-3">Though it is possible for a given identifier KEL to issue multiple types of credentials, it is anticipated that there
+will be relatively few (usually one) Management TELs anchored to a given KEL. A more scalable approach to issuing
+multiple credential types from a single identifier would be to use delegated identifiers for the different types of
+credentials to be issued.<a href="#section-1.3-3" class="pilcrow">¶</a></p>
+<table class="center" id="table-2">
+          <caption><a href="#table-2" class="selfRef">Table 2</a></caption>
+<thead>
+            <tr>
+              <th class="text-left" rowspan="1" colspan="1">Label</th>
+              <th class="text-left" rowspan="1" colspan="1">Description</th>
+              <th class="text-left" rowspan="1" colspan="1">Notes</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">v</td>
+              <td class="text-left" rowspan="1" colspan="1">version string</td>
+              <td class="text-left" rowspan="1" colspan="1"> </td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">i</td>
+              <td class="text-left" rowspan="1" colspan="1">namespaced identifier of Registry</td>
+              <td class="text-left" rowspan="1" colspan="1"> </td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">s</td>
+              <td class="text-left" rowspan="1" colspan="1">sequence number of event</td>
+              <td class="text-left" rowspan="1" colspan="1"> </td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">t</td>
+              <td class="text-left" rowspan="1" colspan="1">message type  of event</td>
+              <td class="text-left" rowspan="1" colspan="1"> </td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">p</td>
+              <td class="text-left" rowspan="1" colspan="1">prior event digest</td>
+              <td class="text-left" rowspan="1" colspan="1"> </td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">c</td>
+              <td class="text-left" rowspan="1" colspan="1">list of Configuration Traits/Modes</td>
+              <td class="text-left" rowspan="1" colspan="1">allows for config of no backer registry</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">a</td>
+              <td class="text-left" rowspan="1" colspan="1">digest seal of attachment meta-data for registry</td>
+              <td class="text-left" rowspan="1" colspan="1"> </td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">ii</td>
+              <td class="text-left" rowspan="1" colspan="1">issuer identifier</td>
+              <td class="text-left" rowspan="1" colspan="1"> </td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">vi</td>
+              <td class="text-left" rowspan="1" colspan="1">hash digest of VC contents</td>
+              <td class="text-left" rowspan="1" colspan="1"> </td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">b</td>
+              <td class="text-left" rowspan="1" colspan="1">list of backer identifiers for credentials associated with this registry</td>
+              <td class="text-left" rowspan="1" colspan="1"> </td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">bt</td>
+              <td class="text-left" rowspan="1" colspan="1">backer threshold</td>
+              <td class="text-left" rowspan="1" colspan="1"> </td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">ba</td>
+              <td class="text-left" rowspan="1" colspan="1">list of backers to add (ordered backer set)</td>
+              <td class="text-left" rowspan="1" colspan="1"> </td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">br</td>
+              <td class="text-left" rowspan="1" colspan="1">list of backers to remove (ordered backer set)</td>
+              <td class="text-left" rowspan="1" colspan="1"> </td>
+            </tr>
+          </tbody>
+        </table>
+<div id="configuration">
+<section id="section-1.3.1">
+          <h4 id="name-configuration">
+<a href="#section-1.3.1" class="section-number selfRef">1.3.1. </a><a href="#name-configuration" class="section-name selfRef">Configuration</a>
+          </h4>
+<p id="section-1.3.1-1">The simplest (and most common) case for Registries relies on the witnesses of the controlling KEL and their receipts of
+the KEL events instead of Registry specific backers. To accommodate this case, the <code>c</code> element is added to the
+management TEL inception event with the configuration option <code>NB</code>  to specify that the Registry will never have backers
+configured in the management TEL. In this case, there will only be one event in the management TEL for this Registry and
+the simple events <code>iss</code>
+and <code>rev</code> will be used for "simple issue" and "simple revoke" respectively in the VC specific TELs. For these events,
+the <code>ri</code> field will be the simple identifier referencing the management TEL.<a href="#section-1.3.1-1" class="pilcrow">¶</a></p>
+<table class="center" id="table-3">
+            <caption><a href="#table-3" class="selfRef">Table 3</a></caption>
+<thead>
+              <tr>
+                <th class="text-left" rowspan="1" colspan="1">Option</th>
+                <th class="text-left" rowspan="1" colspan="1">Description</th>
+                <th class="text-left" rowspan="1" colspan="1">Notes</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="text-left" rowspan="1" colspan="1">NB</td>
+                <td class="text-left" rowspan="1" colspan="1">No Backers</td>
+                <td class="text-left" rowspan="1" colspan="1">No registry specific backers will be configured for this Registry</td>
+              </tr>
+            </tbody>
+          </table>
+</section>
+</div>
+<div id="registry-inception-event">
+<section id="section-1.3.2">
+          <h4 id="name-registry-inception-event">
+<a href="#section-1.3.2" class="section-number selfRef">1.3.2. </a><a href="#name-registry-inception-event" class="section-name selfRef">Registry Inception Event</a>
+          </h4>
+<p id="section-1.3.2-1"><code>
+{
+ "v" : "KERI10JSON00011c_",
+ "i" : "ELh3eYC2W_Su1izlvm0xxw01n3XK8bdV2Zb09IqlXB7A",
+ "ii": "EJJR2nmwyYAfSVPzhzS6b5CMZAoTNZH3ULvaU6Z-i0d8",
+ "s" : "0",
+ "t" : "vcp",
+ "b" : ["BbIg_3-11d3PYxSInLN-Q9_T2axD6kkXd3XRgbGZTm6s"],
+ "c" : []
+ "a" : {
+     "d": "EEBp64Aw2rsjdJpAR0e2qCq3jX7q7gLld3LjAwZgaLXU"
+  }
+}-GAB0AAAAAAAAAAAAAAAAAAAAABwEOWdT7a7fZwRz0jiZ0DJxZEM3vsNbLDPEUk-ODnif3O0
+</code><a href="#section-1.3.2-1" class="pilcrow">¶</a></p>
+<p id="section-1.3.2-2">Registry inception event for establishing the list of Backers<a href="#section-1.3.2-2" class="pilcrow">¶</a></p>
+<p id="section-1.3.2-3"><code>
+{
+ "v" : "KERI10JSON00011c_",
+ "i" : "ELh3eYC2W_Su1izlvm0xxw01n3XK8bdV2Zb09IqlXB7A",
+ "ii": "EJJR2nmwyYAfSVPzhzS6b5CMZAoTNZH3ULvaU6Z-i0d8",
+ "s" : "0",
+ "t" : "vcp",
+ "b" : [],
+ "c" : ["NB"]
+}-GAB0AAAAAAAAAAAAAAAAAAAAABwEOWdT7a7fZwRz0jiZ0DJxZEM3vsNbLDPEUk-ODnif3O0
+</code><a href="#section-1.3.2-3" class="pilcrow">¶</a></p>
+<p id="section-1.3.2-4">Registry inception event for "backer-less" configuration<a href="#section-1.3.2-4" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="registry-rotation-event">
+<section id="section-1.3.3">
+          <h4 id="name-registry-rotation-event">
+<a href="#section-1.3.3" class="section-number selfRef">1.3.3. </a><a href="#name-registry-rotation-event" class="section-name selfRef">Registry Rotation Event</a>
+          </h4>
+<p id="section-1.3.3-1"><code>
+{
+ "v" : "KERI10JSON00011c_",
+ "i" : "ELh3eYC2W_Su1izlvm0xxw01n3XK8bdV2Zb09IqlXB7A",
+ "p" : "EY2L3ycqK9645aEeQKP941xojSiuiHsw4Y6yTW-PmsBg",
+ "s" : "1",
+ "t" : "vrt",
+ "ba" : ["BXhpfP_H41hw8f-LluTidLfXxmC4EPwaENHI6CuruE6g"],
+ "br" : ["BbIg_3-11d3PYxSInLN-Q9_T2axD6kkXd3XRgbGZTm6s"]
+}-GAB0AAAAAAAAAAAAAAAAAAAAACQEOWdT7a7fZwRz0jiZ0DJxZEM3vsNbLDPEUk-ODnif3O0
+</code><a href="#section-1.3.3-1" class="pilcrow">¶</a></p>
+<p id="section-1.3.3-2">Registrar rotation event updates the list of Backers<a href="#section-1.3.3-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+</section>
+</div>
+<div id="verifiable-credential-tels">
+<section id="section-1.4">
+        <h3 id="name-verifiable-credential-tels">
+<a href="#section-1.4" class="section-number selfRef">1.4. </a><a href="#name-verifiable-credential-tels" class="section-name selfRef">Verifiable Credential TELs</a>
+        </h3>
+<p id="section-1.4-1">The binary state (issued or revoked) of each verifiable credential (VC) will be tracked in individual TELs associated
+with each VC. The state changes will be represented by 4 sets of 2 events: <code>iss</code> for simple VC issuance and <code>rev</code>
+for simple revocation, <code>bis</code> for the issuance of the VCs with backers and <code>brv</code> for revocation of the VCs with backers
+and corresponding events <code>iis</code>, <code>irv</code> and <code>ibs</code>, <code>ibr</code> to be used when the identifier of the VC is not the
+self-addressing identifier of the VC and that identifier must be included is the separate <code>vi</code> field in the event. The
+events will be anchored to the KEL with an event seal triple attachment signified by the grouping counter <code>-e##</code>.<a href="#section-1.4-1" class="pilcrow">¶</a></p>
+<div id="self-addressing-identifiers">
+<section id="section-1.4.1">
+          <h4 id="name-self-addressing-identifiers">
+<a href="#section-1.4.1" class="section-number selfRef">1.4.1. </a><a href="#name-self-addressing-identifiers" class="section-name selfRef">Self Addressing Identifiers</a>
+          </h4>
+<p id="section-1.4.1-1">The advantage of a content addressable identifier is that it is cryptographically bound to the contents. It provides a
+secure root-of-trust. Any cryptographic commitment to a content addressable identifier is functionally equivalent (given
+comparable cryptographic strength) to a cryptographic commitment to the content itself.<a href="#section-1.4.1-1" class="pilcrow">¶</a></p>
+<p id="section-1.4.1-2">A self-addressing identifier is a special class content-addressable identifier that is also self-referential. The
+special class is distinguished by a special derivation method or process to generate the self-addressing identifier.
+This derivation method is determined by the combination of both a derivation code prefix included in the identifier and
+the context in which the identifier appears. The reason for a special derivation method is that a naive cryptographic
+content addressable identifier must not be self-referential, i.e. the identifier must not appear within the contents
+that it is identifying. This is because the naive cryptographic derivation process of a content addressable identifier
+is a cryptographic digest of the serialized content. Changing one bit of the serialization content will result in a
+different digest. A special derivation method or process is required.<a href="#section-1.4.1-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="derivation-process">
+<section id="section-1.4.2">
+          <h4 id="name-derivation-process">
+<a href="#section-1.4.2" class="section-number selfRef">1.4.2. </a><a href="#name-derivation-process" class="section-name selfRef">Derivation Process</a>
+          </h4>
+<p id="section-1.4.2-1">This process is as follows:<a href="#section-1.4.2-1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-1.4.2-2.1">replace the value of the id field in the content that will hold the self-addressing identifier with a dummy string of
+the same length as the eventually derived self-addressing identifier<a href="#section-1.4.2-2.1" class="pilcrow">¶</a>
+</li>
+            <li class="normal" id="section-1.4.2-2.2">compute the digest of the content with the dummy value for the id field<a href="#section-1.4.2-2.2" class="pilcrow">¶</a>
+</li>
+            <li class="normal" id="section-1.4.2-2.3">prepend the derivation code to the digest and encode appropriately to create the final derived self-addressing
+identifier replace the dummy value with the self-addressing identifier<a href="#section-1.4.2-2.3" class="pilcrow">¶</a>
+</li>
+          </ul>
+<p id="section-1.4.2-3">As long as any verifier recognizes the derivation method, the 'self-addressing` identifier is a cryptographically secure
+commitment to the contents in which it is embedded. It is a cryptographically verifiable self-referential content
+addressable identifier.<a href="#section-1.4.2-3" class="pilcrow">¶</a></p>
+<p id="section-1.4.2-4">Because a self-addressing identifier is both self-referential and cryptographically bound to the contents it identifies,
+anyone can validate this binding if they follow the binding protocol outlined above.<a href="#section-1.4.2-4" class="pilcrow">¶</a></p>
+<p id="section-1.4.2-5">To elaborate, this approach of deriving self-referential identifiers from the contents they identify, we call
+self-addressing. It allows a verifier to verify or re-derive the self-referential identifier given the contents it
+identifies. To clarify, a self-addressing identifier is different from a standard content address or content addressable
+identifier in that a standard content addressable identifier may not be included inside the contents it addresses. The
+standard content addressable identifier is computed on the finished immutable contents and therefore is not
+self-referential.<a href="#section-1.4.2-5" class="pilcrow">¶</a></p>
+</section>
+</div>
+</section>
+</div>
+<div id="self-addressing-identifiers-in-a-tel">
+<section id="section-1.5">
+        <h3 id="name-self-addressing-identifiers-">
+<a href="#section-1.5" class="section-number selfRef">1.5. </a><a href="#name-self-addressing-identifiers-" class="section-name selfRef">Self-Addressing Identifiers in a TEL</a>
+        </h3>
+<p id="section-1.5-1"><code>ii</code> issuer identifier is the controller prefix is self-certifying and may be also self-addressing (but may not be) wrt
+to its inception event  (For GLEIF TELS the issuer identifier must be self-addressing)<a href="#section-1.5-1" class="pilcrow">¶</a></p>
+<p id="section-1.5-2"><code>ri</code>, <code>i</code> registry identifier is self-addressing wrt the registry inception event <code>i</code> VC identifier is self-addressing
+wrt to the VC itself<a href="#section-1.5-2" class="pilcrow">¶</a></p>
+<p id="section-1.5-3">There are two options for including a cryptographic commitment to the VC in the TEL VC events. The identifier of the VC
+can self-addressing using the same technique KERI uses for self-addressing identifiers. The VC identifier can be created
+by padding the VC <code>id</code> field and taking a hash digest of the serialized contents of the VC. This form of self-addressing
+identifier can be used as the <code>i</code> field in the TEL <code>iss</code>, <code>rev</code>, <code>bis</code> and <code>brv</code> events and no other reference to the VC
+is required. When the identifier of the VC is derived from some other method, the TEL events <code>iis</code>, <code>irv</code>, <code>ibs</code> and
+<code>ibr</code> are used, and a hash digest of the contents of the VC is placed in the <code>vi</code> field.<a href="#section-1.5-3" class="pilcrow">¶</a></p>
+<p id="section-1.5-4">The VC identifier can be namespaced using DID syntax. In this case, the VC identifier in the TEL events would be the
+method specific identifier of the full DID. For informational purposes, the fully qualified DID can be included as an
+attachment to the TEL events.<a href="#section-1.5-4" class="pilcrow">¶</a></p>
+<p id="section-1.5-5">The list of backers needed to sign each VC TEL event is maintained by the management TEL. Since that list can change
+over time with the <code>rot</code> management events listed above, the non-simple VC events (<code>bis</code>, <code>brv</code>) must be anchored to the
+event in the management TEL at the point when the VC event is published with the <code>ra</code> field. This way, the backer
+signatures can be indexed into the proper list of backers at the time of issuance or revocation.<a href="#section-1.5-5" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="credential-issuancerevocation-tel">
+<section id="section-1.6">
+        <h3 id="name-credential-issuance-revocat">
+<a href="#section-1.6" class="section-number selfRef">1.6. </a><a href="#name-credential-issuance-revocat" class="section-name selfRef">Credential Issuance/Revocation TEL</a>
+        </h3>
+<table class="center" id="table-4">
+          <caption><a href="#table-4" class="selfRef">Table 4</a></caption>
+<thead>
+            <tr>
+              <th class="text-left" rowspan="1" colspan="1">Label</th>
+              <th class="text-left" rowspan="1" colspan="1">Description</th>
+              <th class="text-left" rowspan="1" colspan="1">Notes</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">v</td>
+              <td class="text-left" rowspan="1" colspan="1">version string</td>
+              <td class="text-left" rowspan="1" colspan="1"> </td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">i</td>
+              <td class="text-left" rowspan="1" colspan="1">namespaced identifier of VC</td>
+              <td class="text-left" rowspan="1" colspan="1"> </td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">s</td>
+              <td class="text-left" rowspan="1" colspan="1">sequence number of event</td>
+              <td class="text-left" rowspan="1" colspan="1"> </td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">t</td>
+              <td class="text-left" rowspan="1" colspan="1">message type  of event</td>
+              <td class="text-left" rowspan="1" colspan="1"> </td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">dt</td>
+              <td class="text-left" rowspan="1" colspan="1">issuer system data/time in iso format</td>
+              <td class="text-left" rowspan="1" colspan="1"> </td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">p</td>
+              <td class="text-left" rowspan="1" colspan="1">prior event digest</td>
+              <td class="text-left" rowspan="1" colspan="1"> </td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">ri</td>
+              <td class="text-left" rowspan="1" colspan="1">registry identifier from management TEL</td>
+              <td class="text-left" rowspan="1" colspan="1"> </td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">ra</td>
+              <td class="text-left" rowspan="1" colspan="1">registry anchor to management TEL</td>
+              <td class="text-left" rowspan="1" colspan="1"> </td>
+            </tr>
+          </tbody>
+        </table>
+<div id="simple-credential-issuance-event">
+<section id="section-1.6.1">
+          <h4 id="name-simple-credential-issuance-">
+<a href="#section-1.6.1" class="section-number selfRef">1.6.1. </a><a href="#name-simple-credential-issuance-" class="section-name selfRef">Simple Credential Issuance Event</a>
+          </h4>
+<p id="section-1.6.1-1"><code>
+{
+ "v" : "KERI10JSON00011c_",
+ "i" : "Ezpq06UecHwzy-K9FpNoRxCJp2wIGM9u2Edk-PLMZ1H4",
+ "s" : "0",
+ "t" : "iss",
+ "dt": "2021-05-27T19:16:50.750302+00:00",
+ "ri": "ELh3eYC2W_Su1izlvm0xxw01n3XK8bdV2Zb09IqlXB7A"
+}-GAB0AAAAAAAAAAAAAAAAAAAAAAwELvaU6Z-i0d8JJR2nmwyYAZAoTNZH3UfSVPzhzS6b5CM
+</code><a href="#section-1.6.1-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="simple-credential-revocation-event">
+<section id="section-1.6.2">
+          <h4 id="name-simple-credential-revocatio">
+<a href="#section-1.6.2" class="section-number selfRef">1.6.2. </a><a href="#name-simple-credential-revocatio" class="section-name selfRef">Simple Credential Revocation Event</a>
+          </h4>
+<p id="section-1.6.2-1"><code>
+{
+ "v" : "KERI10JSON00011c_",
+ "i" : "Ezpq06UecHwzy-K9FpNoRxCJp2wIGM9u2Edk-PLMZ1H4",
+ "s" : "1",
+ "t" : "rev",
+ "dt": "2021-05-27T19:16:50.750302+00:00",
+ "p" : "EY2L3ycqK9645aEeQKP941xojSiuiHsw4Y6yTW-PmsBg"
+}-GAB0AAAAAAAAAAAAAAAAAAAAABAELvaU6Z-i0d8JJR2nmwyYAZAoTNZH3UfSVPzhzS6b5CM
+</code><a href="#section-1.6.2-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="credential-issuance-event">
+<section id="section-1.6.3">
+          <h4 id="name-credential-issuance-event">
+<a href="#section-1.6.3" class="section-number selfRef">1.6.3. </a><a href="#name-credential-issuance-event" class="section-name selfRef">Credential Issuance Event</a>
+          </h4>
+<p id="section-1.6.3-1"><code>
+{
+ "v" : "KERI10JSON00011c_",
+ "i" : "Ezpq06UecHwzy-K9FpNoRxCJp2wIGM9u2Edk-PLMZ1H4",
+ "s" : "0",
+ "t" : "bis",
+ "dt": "2021-05-27T19:16:50.750302+00:00",
+ "ra": {
+    "i": "ELh3eYC2W_Su1izlvm0xxw01n3XK8bdV2Zb09IqlXB7A",
+    "s": "2",
+    "d": "Ezpq06UecHwzy-K9FpNoRxCJp2wIGM9u2Edk-PLMZ1H4"
+  }
+}-GAB0AAAAAAAAAAAAAAAAAAAAAAwELvaU6Z-i0d8JJR2nmwyYAZAoTNZH3UfSVPzhzS6b5CM
+</code><a href="#section-1.6.3-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="credential-revocation-event">
+<section id="section-1.6.4">
+          <h4 id="name-credential-revocation-event">
+<a href="#section-1.6.4" class="section-number selfRef">1.6.4. </a><a href="#name-credential-revocation-event" class="section-name selfRef">Credential Revocation Event</a>
+          </h4>
+<p id="section-1.6.4-1"><code>
+{
+ "v" : "KERI10JSON00011c_",
+ "i" : "Ezpq06UecHwzy-K9FpNoRxCJp2wIGM9u2Edk-PLMZ1H4",
+ "s" : "1",
+ "t" : "brv",
+ "dt": "2021-05-27T19:16:50.750302+00:00",
+ "p" : "EY2L3ycqK9645aEeQKP941xojSiuiHsw4Y6yTW-PmsBg",
+ "ra": {
+    "i": "ELh3eYC2W_Su1izlvm0xxw01n3XK8bdV2Zb09IqlXB7A",
+    "s": "4",
+    "d": "Ezpq06UecHwzy-K9FpNoRxCJp2wIGM9u2Edk-PLMZ1H4"
+  }
+}-GAB0AAAAAAAAAAAAAAAAAAAAABAELvaU6Z-i0d8JJR2nmwyYAZAoTNZH3UfSVPzhzS6b5CM
+</code><a href="#section-1.6.4-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+</section>
+</div>
+<div id="use-case">
+<section id="section-1.7">
+        <h3 id="name-use-case">
+<a href="#section-1.7" class="section-number selfRef">1.7. </a><a href="#name-use-case" class="section-name selfRef">Use Case</a>
+        </h3>
+<p id="section-1.7-1">The <em>Verifiable Legal Entity Identifier</em> (vLEI) provides a lightweight, easy to understand use case for a <em>Transaction
+Event Log</em> as a <em>Verifiable Credential Registry</em>. Issuing a VC has been described above. Verification of a VC will start
+with the presentation of a vLEI VC as proof (all vLEI VCs are public and therefore proof presentation will include the
+entire vLEI VC). The verifier will extract the DID of the issuer from the VC, and calculate the hash digest of the
+serialized contents of the VC. By parsing the namespaced identifier of the VC, the verifier will perform the following
+steps:<a href="#section-1.7-1" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="section-1.7-2">
+<li id="section-1.7-2.1">Retrieve the key state from the KERI did method (or appropriate DID method tunnel) using the controller identifier
+embedded in the VC identifier<a href="#section-1.7-2.1" class="pilcrow">¶</a>
+</li>
+          <li id="section-1.7-2.2">Retrieve and verify the KEL against the key state of the issuer<a href="#section-1.7-2.2" class="pilcrow">¶</a>
+</li>
+          <li id="section-1.7-2.3">Retrieve the management TEL using the Registry identifier embedded in the VC identifier and determine the Registrars
+to use to retrieve the VC TEL.<a href="#section-1.7-2.3" class="pilcrow">¶</a>
+</li>
+          <li id="section-1.7-2.4">Retrieve the VC TEL and calculate the issuance/revocation state of the VC from the events in the TEL.<a href="#section-1.7-2.4" class="pilcrow">¶</a>
+</li>
+          <li id="section-1.7-2.5">Using the keys from the KERI event to which the <code>iss</code> event is anchored, verify the signature on the VC.<a href="#section-1.7-2.5" class="pilcrow">¶</a>
+</li>
+        </ol>
+</section>
+</div>
+<div id="security-considerations">
+<section id="section-1.8">
+        <h3 id="name-security-considerations">
+<a href="#section-1.8" class="section-number selfRef">1.8. </a><a href="#name-security-considerations" class="section-name selfRef">Security Considerations</a>
+        </h3>
+<ol start="1" type="1" class="normal type-1" id="section-1.8-1">
+<li id="section-1.8-1.1">To avoid DDoS attack by flooding an Endorser with TEL events that are not associated with any identifiers they are
+associated with, TEL events need to be placed in escrow until an anchoring KEL event is seen for the TEL identifier.<a href="#section-1.8-1.1" class="pilcrow">¶</a>
+</li>
+        </ol>
+</section>
+</div>
+</section>
+</div>
+<div id="iana-considerations">
+<section id="section-2">
+      <h2 id="name-iana-considerations">
+<a href="#section-2" class="section-number selfRef">2. </a><a href="#name-iana-considerations" class="section-name selfRef">IANA Considerations</a>
+      </h2>
+<p id="section-2-1">This document has no IANA actions.<a href="#section-2-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="acknowledgments">
+<section id="appendix-A">
+      <h2 id="name-acknowledgments">
+<a href="#name-acknowledgments" class="section-name selfRef">Acknowledgments</a>
+      </h2>
+<p id="appendix-A-1">TODO acknowledge.<a href="#appendix-A-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="authors-addresses">
+<section id="appendix-B">
+      <h2 id="name-authors-address">
+<a href="#name-authors-address" class="section-name selfRef">Author's Address</a>
+      </h2>
+<address class="vcard">
+        <div dir="auto" class="left"><span class="fn nameRole">Phil Feairheller</span></div>
+<div dir="auto" class="left"><span class="org">GLEIF</span></div>
+<div class="email">
+<span>Email:</span>
+<a href="mailto:Philip.Feairheller@gleif.org" class="email">Philip.Feairheller@gleif.org</a>
+</div>
+</address>
+</section>
+</div>
+<script>const toc = document.getElementById("toc");
+toc.querySelector("h2").addEventListener("click", e => {
+  toc.classList.toggle("active");
+});
+toc.querySelector("nav").addEventListener("click", e => {
+  toc.classList.remove("active");
+});
+</script>
+</body>
+</html>
