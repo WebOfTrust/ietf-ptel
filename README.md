@@ -1,3 +1,7 @@
+# This repository is superseded by the work at ToIP Technical Stack Working Group ACDC Task Force
+
+https://github.com/trustoverip/tswg-ptel-specification
+
 # Public Transaction Event Logs (PTEL)
 
 This is the working area for the individual Internet-Draft, "Public Transaction Event Logs (PTEL)".
